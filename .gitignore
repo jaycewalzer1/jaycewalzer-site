@@ -20,3 +20,5 @@ explainers/build_preview/
 __pycache__/
 node_modules/
 .DS_Store
+# site sync: state, holds, clones and reports stay on this Mac
+tools/sync/local/
