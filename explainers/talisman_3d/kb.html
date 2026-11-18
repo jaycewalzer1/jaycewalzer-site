@@ -1,0 +1,16 @@
+<!doctype html><meta charset=utf-8><style>
+@font-face{font-family:G;src:url(EBGaramond.ttf)}
+html,body{margin:0;background:#1F3240;overflow:hidden;width:1920px;height:1080px}
+#img{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+#cap{position:absolute;left:0;right:0;bottom:70px;text-align:center;font:52px G,serif;color:#F1ECE2;text-shadow:0 2px 12px rgba(10,20,28,.75)}
+</style><img id=img><div id=cap></div><script>
+const q=new URLSearchParams(location.search), cfg=JSON.parse(q.get('c'));
+const img=document.getElementById('img'), cap=document.getElementById('cap'); img.src=cfg.img;
+const e=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+window.setTime=t=>{const k=e(t/cfg.dur), z=cfg.z0+(cfg.z1-cfg.z0)*k;
+ const cx=960+(cfg.cx-960)*k, cy=540+(cfg.cy-540)*k;
+ img.style.transform=`translate(${960-cx*z}px,${540-cy*z}px) scale(${z})`;
+ const c=cfg.caps.find(([a,b])=>t>=a&&t<b); cap.textContent=c?c[2]:'';
+ cap.style.opacity=c?Math.min(e((t-c[0])/0.5),e((c[1]-t)/0.4)):0;};
+img.onload=()=>{setTime(0);window.ready=true};
+</script>

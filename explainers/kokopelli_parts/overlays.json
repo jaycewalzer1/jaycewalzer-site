@@ -1,0 +1,6 @@
+[["k1","<div class=c>What the sim itself renders: a walk across a footbridge in Unreal.</div>"],
+ ["k2l","<div class=l style='left:30px;top:20px'>depth</div><div class=l style='left:990px;top:20px'>segmentation</div><div class=l style='left:30px;top:560px'>edges</div><div class=l style='left:990px;top:560px'>blur</div>"],
+ ["k2","<div class=c>From it come control videos: the shape of the scene, without its look.</div>"],
+ ["k3l","<div class=l style='left:30px;top:225px'>Unreal</div><div class=l style='left:990px;top:225px'>painted by Cosmos3-Nano-Sim-Transfer</div>"],
+ ["k3","<div class=c>The world model paints the same walk as realistic video.</div>"],
+ ["k4","<div class=c>Each agent sees only its own painted film, never the sim.</div>"]]

@@ -1,0 +1,227 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: G; src: url(EBGaramond.ttf); }
+@font-face { font-family: G; font-style: italic; src: url(EBGaramond-Italic.ttf); }
+html, body { margin: 0; background: #1F3240; overflow: hidden; }
+canvas { display: block; }
+#cap { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font: 52px G, serif; color: #F1ECE2;
+  text-shadow: 0 2px 12px rgba(10,20,28,.65); }
+#title { position: absolute; left: 0; right: 0; top: 9%; text-align: center; color: #F1ECE2; font-family: G, serif; }
+#title .t { font-size: 120px; letter-spacing: 1px; }
+#title .s { font-size: 50px; font-style: italic; color: #D9BE7E; margin-top: 6px; }
+.lab { position: absolute; font: italic 40px G, serif; transform: translate(-50%, -50%); white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(10,20,28,.7); }
+</style></head>
+<body>
+<div id="title"><div class="t"></div><div class="s"></div></div>
+<div id="cap"></div>
+<div id="labs"></div>
+<script type="importmap">{ "imports": { "three": "./node_modules/three/build/three.module.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+
+const C = { BG: 0x1F3240, INK: 0xF1ECE2, MUTED: 0x9AA6AB, SEA: 0x7FA3B6, DRIFT: 0xB59A80, GOLD: 0xD9BE7E, CORAL: 0xC9826A };
+const W = 1920, H = 1080;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(C.BG);
+scene.fog = new THREE.Fog(C.BG, 14, 34);
+const cam = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
+
+scene.add(new THREE.HemisphereLight(0xF1ECE2, 0x1F3240, 1.1));
+const sun = new THREE.DirectionalLight(0xfff3e0, 2.0);
+sun.position.set(-6, 12, 7); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); sun.shadow.radius = 6;
+Object.assign(sun.shadow.camera, { left: -10, right: 10, top: 10, bottom: -10 });
+scene.add(sun);
+
+const clay = (c, k = 1) => new THREE.MeshStandardMaterial({ color: new THREE.Color(c).multiplyScalar(k), roughness: 0.95, metalness: 0 });
+const mesh = (g, m, cast = true) => { const o = new THREE.Mesh(g, m); o.castShadow = cast; o.receiveShadow = true; return o; };
+
+// ground + table
+const ground = mesh(new THREE.PlaneGeometry(80, 80), clay(C.BG, 1.25), false);
+ground.rotation.x = -Math.PI / 2; ground.position.y = -1.2; scene.add(ground);
+const table = mesh(new THREE.BoxGeometry(11.5, 0.3, 5.2), clay(C.DRIFT, 0.85));
+table.position.y = -0.15; scene.add(table);
+for (const [x, z] of [[-5.3, -2.2], [5.3, -2.2], [-5.3, 2.2], [5.3, 2.2]]) {
+  const leg = mesh(new THREE.BoxGeometry(0.25, 1.0, 0.25), clay(C.DRIFT, 0.7)); leg.position.set(x, -0.8, z); scene.add(leg);
+}
+
+// boards: A at x=-2.6, B at x=+2.6; square 0.38
+const S = 0.38, BX = { A: -2.6, B: 2.6 };
+const light = clay(C.INK, 0.9), dark = clay(C.SEA, 0.55);
+for (const b of ['A', 'B']) {
+  const base = mesh(new THREE.BoxGeometry(8 * S + 0.24, 0.1, 8 * S + 0.24), clay(C.DRIFT, 0.55));
+  base.position.set(BX[b], 0.05, 0); scene.add(base);
+  for (let f = 0; f < 8; f++) for (let r = 0; r < 8; r++) {
+    const q = mesh(new THREE.BoxGeometry(S, 0.04, S), (f + r) % 2 ? light : dark, false);
+    q.position.set(BX[b] + (f - 3.5) * S, 0.12, (3.5 - r) * S); scene.add(q);
+  }
+}
+// square centre. Board A: white at +z (south). Board B is flipped: white at -z (north).
+const sq = (b, f, r) => b === 'A'
+  ? new THREE.Vector3(BX.A + (f - 3.5) * S, 0.14, (3.5 - r) * S)
+  : new THREE.Vector3(BX.B - (f - 3.5) * S, 0.14, (r - 3.5) * S);
+
+// pieces
+const pts = (arr) => arr.map(([x, y]) => new THREE.Vector2(x, y));
+const PAWN = new THREE.LatheGeometry(pts([[0, 0], [0.13, 0], [0.13, 0.04], [0.07, 0.08], [0.05, 0.2], [0.09, 0.24], [0.0, 0.34]]), 24);
+const TALL = new THREE.LatheGeometry(pts([[0, 0], [0.15, 0], [0.15, 0.05], [0.08, 0.1], [0.06, 0.34], [0.11, 0.38], [0.07, 0.44], [0.0, 0.5]]), 24);
+function knight(mat) {
+  const g = new THREE.Group();
+  const b = mesh(new THREE.CylinderGeometry(0.13, 0.15, 0.1, 24), mat); b.position.y = 0.05; g.add(b);
+  const neck = mesh(new THREE.BoxGeometry(0.14, 0.3, 0.2), mat); neck.position.set(0, 0.24, 0); neck.rotation.z = 0.25; g.add(neck);
+  const head = mesh(new THREE.BoxGeometry(0.13, 0.12, 0.28), mat); head.position.set(-0.02, 0.38, 0.06); head.rotation.x = 0.35; g.add(head);
+  return g;
+}
+const WHITE = clay(C.INK, 1.0), BLACK = clay(0x2a3640, 1.0);
+const piece = (geo, mat, p) => { const o = mesh(geo, mat); o.position.copy(p); scene.add(o); return o; };
+// a middlegame-ish scatter on both boards (decor)
+const deco = { A: { w: [[0,1],[1,1],[5,1],[6,1],[7,1],[3,3],[4,0],[0,0]], b: [[0,6],[1,6],[2,6],[6,6],[7,6],[3,4],[4,7],[7,7]] },
+               B: { w: [[0,1],[1,1],[2,1],[5,1],[6,1],[4,0],[7,0],[3,2]], b: [[0,6],[1,5],[5,6],[6,6],[7,6],[4,7],[2,7],[3,5]] } };
+for (const b of ['A', 'B']) {
+  deco[b].w.forEach(([f, r], i) => piece(i >= 5 ? TALL : PAWN, WHITE, sq(b, f, r)));
+  deco[b].b.forEach(([f, r], i) => piece(i >= 5 ? TALL : PAWN, BLACK, sq(b, f, r)));
+}
+// the story pieces: a black knight on A f6 is taken by a white bishop from c3, crosses to B_black's pocket, dropped on B e4
+const kn = knight(BLACK); scene.add(kn);
+const bishop = piece(TALL, WHITE, sq('A', 2, 2));
+
+// seats: south side = team 1 (A_white, B_black), north side = team 2 (A_black, B_white)
+const seats = {
+  A_white: { x: BX.A, z: 3.6, col: C.SEA }, B_black: { x: BX.B, z: 3.6, col: C.SEA },
+  A_black: { x: BX.A, z: -3.6, col: C.DRIFT }, B_white: { x: BX.B, z: -3.6, col: C.DRIFT },
+};
+for (const [k, s] of Object.entries(seats)) {
+  const g = new THREE.Group();
+  const body = mesh(new THREE.CapsuleGeometry(0.42, 0.9, 8, 24), clay(s.col, 0.9)); body.position.y = 0.15; g.add(body);
+  const head = mesh(new THREE.SphereGeometry(0.3, 24, 16), clay(s.col, 1.0)); head.position.y = 1.15; g.add(head);
+  g.position.set(s.x, 0, s.z); scene.add(g); s.g = g;
+  // clock: a block with a bar on top
+  const block = mesh(new THREE.BoxGeometry(1.1, 0.22, 0.3), clay(C.DRIFT, 0.5));
+  const cx = s.x + (k.startsWith('A') ? -1.95 : 1.95), cz = Math.sign(s.z) * 2.15;
+  block.position.set(cx, 0.11, cz); scene.add(block);
+  const bar = mesh(new THREE.BoxGeometry(1.0, 0.14, 0.22), clay(s.col, 1.2)); bar.position.set(cx, 0.29, cz); scene.add(bar);
+  s.bar = bar; s.cx = cx; s.cz = cz;
+  // pocket tray
+  const tray = mesh(new THREE.BoxGeometry(0.9, 0.06, 0.5), clay(s.col, 0.6));
+  tray.position.set(s.x + (k.startsWith('A') ? 1.25 : -1.25) * 0, 0.03, Math.sign(s.z) * 1.95); // in front of seat, past the board edge
+  tray.position.x = s.x + (k.startsWith('A') ? 1.0 : -1.0); scene.add(tray); s.tray = tray;
+}
+// speech token for "need N"
+const bubble = new THREE.Group();
+const bb = mesh(new THREE.SphereGeometry(0.22, 24, 16), clay(C.GOLD, 1.0)); bubble.add(bb);
+const bt = mesh(new THREE.ConeGeometry(0.08, 0.18, 12), clay(C.GOLD, 1.0)); bt.position.set(-0.14, -0.2, 0); bt.rotation.z = 0.6; bubble.add(bt);
+scene.add(bubble);
+
+// spend bars for A_white: think / talk / wait, floating above the table behind the seat
+const spend = [['think', C.SEA, 2.0], ['talk', C.DRIFT, 0.7], ['wait', C.GOLD, 1.4]].map(([n, c, w]) => {
+  const m = mesh(new THREE.BoxGeometry(1, 0.32, 0.32), clay(c, 1.05)); scene.add(m); return { n, m, w };
+});
+
+// ---------- timeline ----------
+const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+const seg = (t, a, b) => ease((t - a) / (b - a));
+const lerp = (a, b, k) => a + (b - a) * k;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const keys = [ // t, camera position, look-at
+  [0, V(0, 13, 24), V(0, -1.5, 0)], [9, V(-3, 8.5, 11), V(0, 0, 0.3)],
+  [16, V(-7, 6, 8), V(-1.2, 0, 0.5)], [21, V(4, 5.5, 9.5), V(1.2, 0, 1.2)], [24, V(7, 4.5, 7), V(2.2, 0, 0.6)],
+  [27, V(0, 6.5, 9.5), V(0, 0, 0.6)], [30, V(-1, 4.2, 11), V(-1.4, 0.8, 1.6)],
+  [34, V(-4.5, 4.2, 10.5), V(-1.6, 1.0, 1.6)], [42, V(-1.5, 4.0, 11), V(-1.0, 1.0, 1.6)], [46, V(-0.5, 4.4, 11.5), V(0, 0.9, 1.4)],
+  [52, V(4, 9, 12), V(0, 0, 0)], [58, V(0, 12, 22), V(0, -1.5, 0)],
+];
+function camAt(t) {
+  let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++;
+  const [t0, p0, l0] = keys[i], [t1, p1, l1] = keys[i + 1];
+  const k = ease((t - t0) / (t1 - t0));
+  cam.position.lerpVectors(p0, p1, k); cam.lookAt(new THREE.Vector3().lerpVectors(l0, l1, k));
+}
+const caps = [
+  [9.3, 13, 'Bughouse: two boards, two teams of two.'],
+  [13.2, 16.6, 'Partners sit side by side and play opposite colours.'],
+  [16.8, 21, 'Capture a piece, and it crosses the table to your partner.'],
+  [21.2, 24, 'They can drop it on any empty square as their move.'],
+  [24.3, 29.8, 'Every seat has its own clock. A flag on either board ends it for everyone.'],
+  [30.3, 34.3, 'So each turn is a choice: move now, or wait for a piece.'],
+  [34.5, 38.4, 'Ask your partner for it, or stay quiet.'],
+  [38.6, 42, 'And decide how long to think.'],
+  [42.2, 46, 'Thinking, talking and waiting are all paid from one clock.'],
+  [46.3, 51.8, 'Hivemind, a frozen engine, picks the moves. A small policy decides around it.'],
+];
+const capEl = document.getElementById('cap'), titleEl = document.getElementById('title'), labsEl = document.getElementById('labs');
+window.setTitle = (a, b) => { titleEl.querySelector('.t').textContent = a; titleEl.querySelector('.s').textContent = b; };
+setTitle('Talisman', 'think, talk, or move');
+const labs = [];
+function label(text, color, pos, a, b) { const el = document.createElement('div'); el.className = 'lab'; el.textContent = text;
+  el.style.color = color; labsEl.appendChild(el); labs.push({ el, pos, a, b }); }
+label('board A', '#F1ECE2', V(BX.A, 0.9, 0), 9.5, 13); label('board B', '#F1ECE2', V(BX.B, 0.9, 0), 9.5, 13);
+label('team 1', '#7FA3B6', V(0, 1.6, 3.6), 13.2, 16.6); label('team 2', '#B59A80', V(0, 1.6, -3.6), 13.2, 16.6);
+label('need N', '#D9BE7E', null, 35.2, 38.4);
+const spendLab = spend.map(s => { label(s.n, '#' + s.m.material.color.clone().multiplyScalar(1 / 1.05).getHexString(), null, 0, 0); return labs[labs.length - 1]; });
+
+window.setTime = (t) => {
+  camAt(t);
+  // title / closing
+  let to = 0;
+  if (t < 9) to = seg(t, 0.6, 2.0) * (1 - seg(t, 7.2, 8.6));
+  if (t > 52.5) { if (titleEl.dataset.m !== 'end') { setTitle('Talisman', 'github.com/jaycewalzer1/talisman-bughouse-engine'); titleEl.dataset.m = 'end'; } to = seg(t, 53, 54.5); }
+  else if (titleEl.dataset.m === 'end') { setTitle('Talisman', 'think, talk, or move'); titleEl.dataset.m = ''; }
+  titleEl.style.opacity = to;
+  // captions
+  let c = caps.find(([a, b]) => t >= a && t < b);
+  capEl.textContent = c ? c[2] : '';
+  capEl.style.opacity = c ? Math.min(seg(t, c[0], c[0] + 0.5), 1 - seg(t, c[1] - 0.4, c[1])) : 0;
+  // team glow
+  const glow = seg(t, 13.2, 14) * (1 - seg(t, 16, 16.6));
+  for (const s of Object.values(seats)) s.g.position.y = 0.0;
+  seats.A_white.g.position.y = seats.B_black.g.position.y = 0.25 * Math.sin(Math.PI * glow) * (glow > 0 ? 1 : 0);
+  // capture: bishop c3 -> f6 at 17.0-17.8; knight lifts and arcs to B_black tray 17.6-19.8; drop on B e4 22.0-23.0
+  bishop.position.lerpVectors(sq('A', 2, 2), sq('A', 5, 5), seg(t, 17.0, 17.8));
+  const k0 = sq('A', 5, 5), tray = seats.B_black.tray.position.clone().add(V(0, 0.06, 0)), k2 = sq('B', 4, 3);
+  const a1 = seg(t, 17.6, 19.8), a2 = seg(t, 22.0, 23.0);
+  if (a2 > 0) { kn.position.lerpVectors(tray, k2, a2); kn.position.y += Math.sin(Math.PI * a2) * 0.9; }
+  else { kn.position.lerpVectors(k0, tray, a1); kn.position.y += Math.sin(Math.PI * a1) * 2.2; }
+  kn.rotation.y = a1 * Math.PI;
+  // clocks drain from 24; A_white's drains while it waits 38-46
+  const drain = { A_white: 0.35, A_black: 0.2, B_white: 0.45, B_black: 0.3 };
+  for (const [k, s] of Object.entries(seats)) {
+    let f = 1 - drain[k] * seg(t, 24.5, 29.5);
+    if (k === 'A_white') f -= 0.25 * seg(t, 31, 46);
+    s.bar.scale.x = Math.max(f, 0.02);
+    s.bar.position.x = s.cx - 0.5 * (1 - s.bar.scale.x);
+  }
+  // need N bubble: A_white -> B_black 35.2-37.6
+  const bA = V(seats.A_white.x + 0.5, 1.9, 3.6), bB = V(seats.B_black.x - 0.5, 1.9, 3.6);
+  const bk = seg(t, 35.4, 37.6);
+  bubble.visible = t > 35 && t < 38.6; bubble.position.lerpVectors(bA, bB, bk); bubble.position.y += Math.sin(Math.PI * bk) * 0.8;
+  bubble.scale.setScalar(seg(t, 35, 35.5) * (1 - seg(t, 38.0, 38.6)) || 0.001);
+  labs[4].pos = bubble.position.clone().add(V(0, 0.55, 0));
+  // spend bars stacked left to right above A_white's clock side
+  let x = BX.A - 2.05;
+  const on = [seg(t, 31, 33), seg(t, 35, 37), seg(t, 38.8, 41)];
+  spend.forEach((s, i) => {
+    const w = Math.max(s.w * on[i], 0.001); s.m.scale.x = w; s.m.position.set(x + w / 2, 2.3, 1.0);
+    s.m.visible = t > 30 && t < 52; spendLab[i].pos = V(x + s.w / 2, 2.75, 1.0); spendLab[i].a = [31, 35, 38.8][i]; spendLab[i].b = 46;
+    x += s.w + 0.06;
+  });
+  // labels
+  for (const l of labs) {
+    const vis = l.pos && t >= l.a && t < l.b;
+    l.el.style.display = vis ? 'block' : 'none'; if (!vis) continue;
+    const p = l.pos.clone().project(cam);
+    l.el.style.left = ((p.x + 1) / 2 * W) + 'px'; l.el.style.top = ((1 - p.y) / 2 * H) + 'px';
+    l.el.style.opacity = Math.min(seg(t, l.a, l.a + 0.5), 1 - seg(t, l.b - 0.4, l.b));
+  }
+  renderer.render(scene, cam);
+};
+const q = new URLSearchParams(location.search);
+setTime(parseFloat(q.get('t') || '0'));
+window.ready = true;
+</script></body></html>

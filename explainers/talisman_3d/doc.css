@@ -1,0 +1,9 @@
+@font-face { font-family: G; src: url(EBGaramond.ttf); }
+html,body{margin:0;background:#1F3240;}
+.page{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-1.2deg);width:2900px;background:#F1ECE2;color:#24313a;
+ padding:120px 150px;box-shadow:0 40px 120px rgba(0,0,0,.5);font:46px/1.55 G,serif;}
+.path{font:34px ui-monospace,Menlo,monospace;color:#7a8a92;margin-bottom:40px}
+h2{font:600 64px G,serif;margin:0 0 30px}
+code{font:40px ui-monospace,Menlo,monospace;background:#e3dccd;padding:2px 10px;border-radius:6px}
+mark{background:#D9BE7E;padding:0 6px}
+li{margin:18px 0}

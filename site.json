@@ -1,0 +1,236 @@
+{
+  "intro": [
+    "I build worlds for AI agents to live, play and fail in, then measure what they learn: RL environments, world-model simulations and multi-agent games."
+  ],
+  "photos": [
+    {
+      "src": "assets/washed/cannon.jpg",
+      "alt": "Two surfers walking out at Cannon Beach, Oregon",
+      "pos": "center 62%"
+    },
+    {
+      "src": "assets/washed/lineup.jpg",
+      "alt": "Surfers waiting in the lineup at Short Sands, Oregon",
+      "pos": "center 88%"
+    },
+    {
+      "src": "assets/washed/steamer.jpg",
+      "alt": "A wave at Steamer Lane, Santa Cruz",
+      "pos": "center 55%"
+    },
+    {
+      "src": "assets/washed/ob-fog.jpg",
+      "alt": "Fog clearing over Ocean Beach, San Francisco",
+      "pos": "center 50%"
+    }
+  ],
+  "projects": [
+    {
+      "slug": "kokopelli",
+      "name": "Kokopelli",
+      "tag": "an agent living inside a world model",
+      "when": "2026",
+      "links": [
+        "https://kokopelli-labs.com",
+        "https://github.com/jaycewalzer1/kokopelli"
+      ],
+      "hook": "An open-weight LLM agent living a generated life inside a world model I built: an Unreal city, painted into real-looking video by Cosmos, seen and acted on by Qwen. Runs on one laptop, with a 5-arm study on whether lived experience changes a model.",
+      "featured": true
+    },
+    {
+      "slug": "talisman",
+      "name": "Talisman",
+      "tag": "think, talk, or move",
+      "when": "2026",
+      "links": [
+        "https://github.com/jaycewalzer1/talisman-bughouse-engine",
+        "https://github.com/jaycewalzer1/hivemind"
+      ],
+      "hook": "AI teammates in bughouse chess deciding whether to think, talk or move, all on one clock. I fixed the engine's macOS search bug (24 → 657 nodes in 3 s) and train the scheduler on Georgia Tech's PACE cluster.",
+      "featured": true
+    },
+    {
+      "slug": "rsi-rl",
+      "name": "RSI-RL",
+      "tag": "tasks that stay hard",
+      "when": "2026",
+      "links": [
+        "https://github.com/jaycewalzer1/rsi-rl-dev"
+      ],
+      "hook": "A self-improving factory for RL coding tasks: mines real developer complaints, checks them against papers, and holds every task near a 25% frontier pass rate behind a 7-stage test gate.",
+      "featured": true
+    },
+    {
+      "slug": "silverkey",
+      "name": "SilverKey",
+      "tag": "a transaction OS for home sales",
+      "when": "2025–26",
+      "links": [
+        "https://github.com/jaycewalzer1/SilverKey-Inc"
+      ],
+      "hook": "The startup I founded and ran for 16 months: a 9-person team shipping web and mobile apps wired into eXp Realty, DocuSign, ATTOM and Plaid, with a ranking model that learns each buyer's taste.",
+      "featured": true
+    },
+    {
+      "slug": "kusama",
+      "name": "Kusama",
+      "tag": "a medium agents can paint in",
+      "when": "2026",
+      "links": [
+        "https://github.com/jaycewalzer1/kusama"
+      ],
+      "hook": "A painting medium for RL agents where the same program always renders byte-identical pixels, so art rewards can be replayed and checked. Novelty is scored against 20,000 CLIP-embedded museum works.",
+      "featured": true
+    },
+    {
+      "slug": "concept-discovery",
+      "name": "Concept discovery",
+      "tag": "finding the move you'd overlook",
+      "when": "2024",
+      "links": [
+        "https://github.com/jaycewalzer1/ChessConceptDiscovery"
+      ],
+      "hook": "A 5.6M-parameter AlphaZero-style chess agent and a pre-registered test of feature-diverse search: 41.5% vs 35.0% of 200 held-out mates at 3,072 simulations.",
+      "featured": true
+    },
+    {
+      "slug": "dealroom",
+      "name": "DealRoom",
+      "tag": "can small models close a deal",
+      "when": "2026",
+      "links": [
+        "https://github.com/jaycewalzer1/DealRoom"
+      ],
+      "hook": "A synthetic deal environment for tool-using agents, graded by a deterministic verifier: Qwen3 8B closed 13 of 32 deals, Llama 3.1 8B 1 of 46. Then SFT vs SFT + RL on Llama.",
+      "featured": false
+    },
+    {
+      "slug": "kusama-studio",
+      "name": "Kusama studio",
+      "tag": "a model directing a model",
+      "when": "2026",
+      "links": [
+        "https://github.com/jaycewalzer1/Kusama_v2"
+      ],
+      "hook": "A frozen vision-language model directing a frozen image model, every edit saved with its lineage. Its scale edit touched 1.65% of the image and changed none of the 1,031,297 protected pixels.",
+      "featured": false
+    },
+    {
+      "slug": "whiteboard",
+      "name": "Shared whiteboard",
+      "tag": "many hands, one canvas (Mechanize take-home)",
+      "when": "2026",
+      "hook": "A real-time multi-user whiteboard built as a timed take-home: transactional versioning so racing edits never tear a shape. 26 of 26 concurrency checks with 5 users, 3 runs in a row.",
+      "featured": false
+    },
+    {
+      "slug": "rent-roll",
+      "name": "Rent roll reader",
+      "tag": "scanned PDFs to a comps database",
+      "when": "2024",
+      "links": [
+        "https://github.com/jaycewalzer1/rr-tool2"
+      ],
+      "hook": "The core of OM-Analyzer, where I was CTO: an OCR pipeline that turns scanned broker rent rolls into a searchable tenant comps database.",
+      "featured": false
+    },
+    {
+      "slug": "prep-model",
+      "name": "Injectable PrEP model",
+      "tag": "who pays for prevention",
+      "when": "2026",
+      "links": [
+        "https://github.com/jaycewalzer1/prep-model"
+      ],
+      "hook": "A week-by-week microsimulation and cost-effectiveness model of injectable HIV PrEP for people experiencing homelessness. Its sharpest finding: outreach without the injection is the most cost-effective arm.",
+      "featured": false
+    },
+    {
+      "slug": "reels-edits",
+      "name": "reels-edits",
+      "tag": "cutting images to the beat",
+      "when": "2026",
+      "links": [
+        "https://github.com/jaycewalzer1/reels-edits"
+      ],
+      "hook": "A dashboard that cuts images to the beat as a seamless loop. In the demo every cut landed within 16 ms of the beat.",
+      "featured": false
+    }
+  ],
+  "work": [
+    {
+      "slug": "job-soal",
+      "name": "soal",
+      "tag": "research scientist",
+      "when": "Oct 2026 – now"
+    },
+    {
+      "slug": "job-silverkey",
+      "name": "SilverKey",
+      "tag": "founder & CEO",
+      "when": "Apr 2025 – Aug 2026",
+      "media": "silverkey"
+    },
+    {
+      "slug": "job-homereels",
+      "name": "HomeReels",
+      "tag": "founding engineer",
+      "when": "Oct 2024 – May 2025"
+    },
+    {
+      "slug": "job-gtri",
+      "name": "Georgia Tech Research Institute",
+      "tag": "researcher",
+      "when": "Aug 2024 – Jan 2025",
+      "media": "concept-discovery"
+    },
+    {
+      "slug": "job-om",
+      "name": "OM-Analyzer",
+      "tag": "CTO",
+      "when": "May – Jul 2024",
+      "media": "rent-roll"
+    },
+    {
+      "slug": "job-chess",
+      "name": "Chess instructor",
+      "tag": "K-12",
+      "when": "3 years"
+    },
+    {
+      "slug": "job-technique",
+      "name": "The Technique",
+      "tag": "writer",
+      "when": "Georgia Tech"
+    }
+  ],
+  "education": [
+    "**Georgia Institute of Technology**, B.S. Computer Science, specialization in Artificial Intelligence. GPA 3.61. Graduating December 2026."
+  ],
+  "honors": [
+    "CreateX Launch",
+    "GT PACESHIP grant, $30K (about 10,000 GPU-hours)",
+    "ATDC compute grant",
+    "Top 250 in ultrabullet chess",
+    "Junior Olympian",
+    "Water polo, Chess Club"
+  ],
+  "skills": [
+    "PyTorch, RL, MCTS, RL environments and evals",
+    "quality-diversity search, LoRA, CLIP, LLM and VLM pipelines",
+    "Python, C++, TypeScript, React",
+    "PostgreSQL, AWS, Docker, Slurm and HPC",
+    "Claude Code, Codex, Cursor"
+  ],
+  "credits": [
+    "Photographs, washed for this site: Cannon Beach by Jamison McAndie (CC0); Short Sands lineup by Paul Ottaviano ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)); Steamer Lane by Henry Zbyszynski ([CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)); Ocean Beach fog by Brocken Inaglory ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)). All via Wikimedia Commons."
+  ],
+  "proof": [
+    "Research scientist at **soal**",
+    "Founded **SilverKey**, led a 9-person team",
+    "Founding engineer at **HomeReels**, $1M raised",
+    "**$30K** GT PACESHIP compute grant, plus ATDC",
+    "Researcher at **Georgia Tech Research Institute**",
+    "CS (AI) at **Georgia Tech**, Dec 2026"
+  ]
+}

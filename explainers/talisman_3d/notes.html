@@ -1,0 +1,8 @@
+<!doctype html><meta charset=utf-8><link rel=stylesheet href=doc.css><div class=page>
+<div class=path>talisman-bughouse-engine / NOTES.md</div>
+<h2>Baseline status (2026-10-18)</h2><ul>
+<li>C++ tests (upstream flags, macOS/Clang): 283/296; 13 MCTS-selection failures, 2 segfaults; <mark>engine starved (24 nodes/3 s</mark>, 3.3M rejected selections).</li>
+<li><b>Root cause: <code>-Ofast</code> ⇒ <code>-ffinite-math-only</code>.</b> Selection seeds <code>bestScore = -infinity</code> (node.cc) and the solver uses infinity sentinels; Clang folds those comparisons, so selection returns nullptr.</li>
+<li>Fix: commit <code>d80c337</code> on branch <code>talisman/baseline-fixes</code> — <code>-fno-finite-math-only</code> + <code>#error</code> guard on <code>__FINITE_MATH_ONLY__</code>. After fix: <mark>657 nodes/3 s</mark> (~213 nps, network-bound), 16 rejected selections.</li>
+<li>The 2 stale tests are fixed in <code>d80c337</code>. <mark><b>296/296 on macOS Clang 17 and Linux GCC 14.</b></mark></li>
+</ul></div>

@@ -1,0 +1,7 @@
+<!doctype html><meta charset=utf-8><link rel=stylesheet href=doc.css><div class=page>
+<div class=path>talisman-bughouse-engine / docs/phase1_scheduler.md</div>
+<h2>Feature groups (added after the first 40-iteration run)</h2>
+<p><mark>That run showed no learning: waits are rare, one win or loss is a thin signal, and the policy had little to tell a
+good wait from a bad one.</mark> Four optional groups address that. All are off by default and turned on with
+<code>--features</code>; every extra engine search they need comes out of the move's node budget, so total nodes stay equal to
+stock's.</p></div>

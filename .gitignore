@@ -1,0 +1,22 @@
+# scratch design pages, kept locally
+_devices.html
+directions.html
+directions-v2.html
+golds.html
+pairings.html
+set.html
+minimal.html
+washed.html
+washed-b.html
+# unprocessed photos and originals
+assets/raw/
+assets/raw-proj/
+assets/insp/
+assets/video-orig/
+# render caches
+explainers/media/
+explainers/build/
+explainers/build_preview/
+__pycache__/
+node_modules/
+.DS_Store
