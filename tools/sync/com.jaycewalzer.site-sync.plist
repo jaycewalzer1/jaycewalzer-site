@@ -9,7 +9,7 @@
     <string>/Users/jaycewalzer/Desktop/jaycewalzer-site/tools/sync/sync.py</string>
   </array>
   <key>StartCalendarInterval</key>
-  <dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>0</integer></dict>
+  <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>6</integer><key>Minute</key><integer>0</integer></dict>
   <key>StandardOutPath</key><string>/Users/jaycewalzer/Library/Logs/jaycewalzer-site-sync.log</string>
   <key>StandardErrorPath</key><string>/Users/jaycewalzer/Library/Logs/jaycewalzer-site-sync.log</string>
   <key>ProcessType</key><string>Background</string>

@@ -1,4 +1,4 @@
-"""Daily check: did the resume or any GitHub project change? If so, hand the changes to a
+"""Weekly check: did the resume or any GitHub project change? If so, hand the changes to a
 headless Claude Code run that updates the site, its write-ups and its videos.
 
     python3 tools/sync/sync.py              # detect; run the agent if something changed
@@ -34,7 +34,7 @@ RESUME_DIR = LOCAL / "resume"
 
 OVERLEAF_GIT = "https://git.overleaf.com/64ecc81c0101605112ebff00"
 SKIP_REPOS = {"jaycewalzer-site"}  # the site itself: its commits are this job's own output
-REVIEW_DAYS = 7  # commits that don't touch the README are looked at this often
+REVIEW_DAYS = 6  # commits that don't touch the README are looked at this often (under a week, so every weekly run)
 AGENT_TIMEOUT_S = 4 * 3600
 MAX_FAILURES = 3  # after this many failed agent runs in a row, stop retrying and just notify
 AGENT_TOOLS = ["Bash", "Read", "Edit", "Write", "Glob", "Grep", "Agent"]
@@ -298,7 +298,7 @@ def cmd_sync(state, dry_run):
                + f". Report: {report.name}")
     else:
         state["failures"] = state.get("failures", 0) + 1
-        notify(f"Update run failed ({state['failures']} in a row); it will retry tomorrow. Log: ~/Library/Logs/jaycewalzer-site-sync.log")
+        notify(f"Update run failed ({state['failures']} in a row); it will retry next week. Log: ~/Library/Logs/jaycewalzer-site-sync.log")
     save(STATE, state)
     return 0 if ok else 1
 

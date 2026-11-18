@@ -1,6 +1,6 @@
 # Site sync
 
-A daily job (06:00, or on wake if the Mac was asleep) that checks whether the resume on Overleaf or any of my GitHub repos changed, and if so starts a headless Claude Code run that updates the site, the write-ups and the videos, then pushes to `main`.
+A weekly job (Mondays 06:00, or on wake if the Mac was asleep) that checks whether the resume on Overleaf or any of my GitHub repos changed, and if so starts a headless Claude Code run that updates the site, the write-ups and the videos, then pushes to `main`.
 
 - Resume source: Overleaf project https://www.overleaf.com/project/64ecc81c0101605112ebff00 (read over git at https://git.overleaf.com/64ecc81c0101605112ebff00).
 - `sync.py` is the detector and runner. Its docstring lists what counts as a change.
@@ -30,4 +30,4 @@ The resume is read over Overleaf's git access, which needs a token only I can ma
 2. In a terminal: `git -c credential.helper=osxkeychain ls-remote https://git.overleaf.com/64ecc81c0101605112ebff00`
    Username `git`, password the token. The keychain remembers it.
 
-Until then the job still checks GitHub and says the resume was not checked.
+To save a token: `sh tools/sync/save-overleaf-token.sh` (asks for it in a hidden macOS dialog, tests it, and keeps it only if Overleaf accepts it). Until then the job still checks GitHub and says the resume was not checked.

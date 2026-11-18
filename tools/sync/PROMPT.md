@@ -1,6 +1,6 @@
 # Site sync run (jaycewalzer.com)
 
-You are running unattended, started by a daily schedule. Nobody is watching and nobody can answer questions, so never wait for input: decide, do the work, and write down what you decided. Your working directory is the site repo, `~/Desktop/jaycewalzer-site`, which is live at https://jaycewalzer.com (GitHub Pages builds from `main`).
+You are running unattended, started by a weekly schedule. Nobody is watching and nobody can answer questions, so never wait for input: decide, do the work, and write down what you decided. Your working directory is the site repo, `~/Desktop/jaycewalzer-site`, which is live at https://jaycewalzer.com (GitHub Pages builds from `main`).
 
 A detector found changes to Jayce's resume or GitHub projects since the site was last synced. The list is under "This run" at the end. Your job is to bring the site up to date with those changes and nothing else: text, the resume PDF, and the demo and explainer videos where a change makes them wrong or missing.
 
