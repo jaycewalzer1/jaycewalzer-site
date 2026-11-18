@@ -159,12 +159,6 @@
   ],
   "work": [
     {
-      "slug": "job-soal",
-      "name": "soal",
-      "tag": "research scientist",
-      "when": "Oct 2026 – now"
-    },
-    {
       "slug": "job-silverkey",
       "name": "SilverKey",
       "tag": "founder & CEO",
@@ -226,7 +220,6 @@
     "Photographs, washed for this site: Cannon Beach by Jamison McAndie (CC0); Short Sands lineup by Paul Ottaviano ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)); Steamer Lane by Henry Zbyszynski ([CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)); Ocean Beach fog by Brocken Inaglory ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)). All via Wikimedia Commons."
   ],
   "proof": [
-    "Research scientist at **soal**",
     "Founded **SilverKey**, led a 9-person team",
     "Founding engineer at **HomeReels**, $1M raised",
     "**$30K** GT PACESHIP compute grant, plus ATDC",
