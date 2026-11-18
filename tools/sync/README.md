@@ -2,6 +2,7 @@
 
 A daily job (06:00, or on wake if the Mac was asleep) that checks whether the resume on Overleaf or any of my GitHub repos changed, and if so starts a headless Claude Code run that updates the site, the write-ups and the videos, then pushes to `main`.
 
+- Resume source: Overleaf project https://www.overleaf.com/project/64ecc81c0101605112ebff00 (read over git at https://git.overleaf.com/64ecc81c0101605112ebff00).
 - `sync.py` is the detector and runner. Its docstring lists what counts as a change.
 - `PROMPT.md` is what the agent is told to do.
 - `local/` stays on this Mac: `state.json` (what the site was last synced against), `holds.md` (my standing decisions the agent must respect), `owed.json`, `reports/`.
