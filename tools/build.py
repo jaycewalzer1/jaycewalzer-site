@@ -63,6 +63,18 @@ def render_paras(paras):
     return "".join(out)
 
 
+def icon(name):
+    """Inline SVG icon that inherits the text color."""
+    paths = {
+        "play": '<path d="M7 4.5v15l12.5-7.5z" fill="currentColor" stroke="none"/>',
+        "external": '<path d="M7 17 17 7M9 7h8v8"/>',
+        "up": '<path d="M12 19V5M6 11l6-6 6 6"/>',
+        "close": '<path d="M6 6l12 12M18 6 6 18"/>',
+    }
+    return ('<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" '
+            f'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{paths[name]}</svg>')
+
+
 def link_label(url):
     u = re.sub(r"^https?://(www\.)?", "", url).rstrip("/")
     return "code" if u.startswith("github.com/") else u
@@ -87,7 +99,7 @@ def media(slug, kind):
 
 
 def links_html(links, extra=""):
-    items = [f'<a href="{html.escape(u)}">{html.escape(link_label(u))} ↗</a>' for u in links]
+    items = [f'<a href="{html.escape(u)}">{html.escape(link_label(u))} {icon("external")}</a>' for u in links]
     return '<p class="links">' + extra + "".join(items) + "</p>" if (items or extra) else ""
 
 
@@ -103,7 +115,7 @@ def project(item):
     play = ""
     if expl:
         play = (f'<button class="explain" data-src="{expl["src"]}" data-poster="{expl["poster"]}" '
-                f'data-title="{html.escape(item["name"])}">▶ how it works <span>{expl["dur"]}</span></button>')
+                f'data-title="{html.escape(item["name"])}">{icon("play")} how it works <span>{expl["dur"]}</span></button>')
     more = ""
     if paras:
         meta = f'<p class="stack">{html.escape(stack)}</p>' if stack else ""
@@ -129,7 +141,7 @@ def job(item):
     target = item.get("media")
     if target:
         name = next((p["name"] for p in SITE["projects"] if p["slug"] == target), target)
-        see = f'<a class="see" href="#{target}">see {html.escape(name)} ↑</a>'
+        see = f'<a class="see" href="#{target}">see {html.escape(name)} {icon("up")}</a>'
     body = f"<p>{inline(first)}</p>" if first else ""
     extra = ""
     if rest or stack:
@@ -163,6 +175,7 @@ def build():
         "{{EDU}}": "".join(f"<li>{inline(x)}</li>" for x in s["education"]),
         "{{HONORS}}": "".join(f"<li>{inline(x)}</li>" for x in s["honors"]),
         "{{SKILLS}}": "".join(f"<li>{inline(x)}</li>" for x in s["skills"]),
+        "{{CLOSE_ICON}}": icon("close"),
         "{{CREDITS}}": " ".join(inline(c) for c in s["credits"]),
     }.items():
         page = page.replace(k, v)

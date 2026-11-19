@@ -99,6 +99,8 @@ h2{font-weight:400;font-style:italic;font-size:1.15em;color:var(--soft)}
 .jhead em{font-style:normal;color:var(--soft);font-size:.92em;margin-left:auto}
 .jbody p{margin-top:.35em}
 .see{font-size:.9em;display:inline-block;margin-top:.35em}
+.ic{width:.9em;height:.9em;vertical-align:-.1em;display:inline-block;flex:none}
+.explain .ic{width:.75em;height:.75em;vertical-align:-.02em;margin-right:.15em}
 
 .resume{width:var(--col);margin:0 auto}
 .plain{list-style:none}
@@ -178,7 +180,7 @@ dialog button{font:inherit;background:none;border:0;color:#F1ECE2;cursor:pointer
   <p class="credits">{{CREDITS}}</p>
 </footer>
 
-<dialog id="player"><div class="dh"><span id="ptitle"></span><button id="pclose" aria-label="Close">close ✕</button></div><video id="pvideo" controls playsinline preload="metadata"></video></dialog>
+<dialog id="player"><div class="dh"><span id="ptitle"></span><button id="pclose" aria-label="Close">close {{CLOSE_ICON}}</button></div><video id="pvideo" controls playsinline preload="metadata"></video></dialog>
 
 <script>
 // Demos: load and play only while on screen, so the page stays light.
